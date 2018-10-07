@@ -137,7 +137,7 @@ assistant.intent('ChampionStrengths', async (conv) => {
 	try {
 		console.log("Getting data");
 		var championStrengths = await getChampionStrengths(champ, role);
-		let speech = "Champions that counter " + champ + " " + role + " are: ";
+		let speech = "Champions " + champ + " " + role + " counter are: ";
 		for (var i = 0; i < championStrengths.length; i++) {
 			if(i == championStrengths.length-1){
 				speech = speech.slice(0, speech.length-2);
