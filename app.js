@@ -161,7 +161,7 @@ assistant.intent('ChampionSumms', async (conv) => {
 	try {
 		console.log("Getting data");
 		var championSumms = await getChampionSumms(champ, role);
-		let speech = "Most frequently used summoner spells for " + champ + " " + role " are ";
+		let speech = "Most frequently used summoner spells for " + champ + " " + role + " are ";
 		for (var i = 0; i < championSumms.length; i++) {
 			if(i == championSumms.length-1){
 				speech = speech.slice(0, speech.length-2);
