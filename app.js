@@ -118,22 +118,22 @@ app.post('/championCounters', asyncMiddleware(async (req, res, next) => {
   });
 }));
 
-app.post('/championStrengths', asyncMiddleware(async (req, res, next) => {
+app.get('/championStrengths', asyncMiddleware(async (req, res, next) => {
     var championStrengths = await getChampionStrengths("ahri", "middle");
     res.send(championStrengths);
 }));
 
-app.post('/championSumms', asyncMiddleware(async (req, res, next) => {
+app.get('/championSumms', asyncMiddleware(async (req, res, next) => {
     var championSumms = await getChampionSumms("ahri", "middle");
     res.send(championSumms);
 }));
 
-app.post('/championStart', asyncMiddleware(async (req, res, next) => {
+app.get('/championStart', asyncMiddleware(async (req, res, next) => {
     var championStart = await getChampionStart("ahri", "middle");
     res.send(championStart);
 }));
 
-app.post('/championBuild', asyncMiddleware(async (req, res, next) => {
+app.get('/championBuild', asyncMiddleware(async (req, res, next) => {
     var championBuild = await getChampionBuild("ahri", "middle");
     res.send(championBuild);
 }));
