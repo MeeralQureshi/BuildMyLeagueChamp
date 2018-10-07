@@ -98,9 +98,9 @@ async function getChampionBuild(champion, role) {
 app.post('/championCounters', asyncMiddleware(async (req, res, next) => {
 	// if champion and role exist in request
 	var speech = "Sorry, that isn't a valid champion and role combination.";
-	if(req.result.parameters && req.result.parameters.Champion && req.result.parameters.Role){
-		var championCounters = await getChampionCounters(req.result.parameters.Champion, req.result.parameters.Role);
-		speech = "Champions that counter " + req.result.parameters.Champion + " " + req.result.parameters.Role + " are: ";
+	if(req.body.result.parameters && req.body.result.parameters.Champion && req.body.result.parameters.Role){
+		var championCounters = await getChampionCounters(req.body.result.parameters.Champion, req.body.result.parameters.Role);
+		speech = "Champions that counter " + req.body.result.parameters.Champion + " " + req.body.result.parameters.Role + " are: ";
 		for (var i = 0; i < championBuild.length; i++) {
 			if(i == championBuild.length-1){
 				speech = speech.slice(0, speech.length-2);
