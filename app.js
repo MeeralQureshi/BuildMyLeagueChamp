@@ -36,7 +36,7 @@ async function getChampionCounters(champion, role) {
     console.log("This works");
     let championCounters = $('.champion-stats-header-matchup__table--strong').scrape(frame, { string: true });
     console.log(championCounters); // Output the data in the terminal
-    return championCounters;
+    return JSON.parse(championCounters).counters;
 }
 
 async function getChampionStrengths(champion, role) {
@@ -51,7 +51,7 @@ async function getChampionStrengths(champion, role) {
     console.log("This works");
     let championStrengths = $('.champion-stats-header-matchup__table--weak').scrape(frame, { string: true });
     console.log(championStrengths); // Output the data in the terminal
-    return championStrengths;
+    return JSON.parse(championStrengths).strengths;
 }
 
 async function getChampionSumms(champion, role) {
