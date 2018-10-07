@@ -101,8 +101,8 @@ app.post('/championCounters', asyncMiddleware(async (req, res, next) => {
 	if(req.body.result.parameters && req.body.result.parameters.Champion && req.body.result.parameters.Role){
 		var championCounters = await getChampionCounters(req.body.result.parameters.Champion, req.body.result.parameters.Role);
 		speech = "Champions that counter " + req.body.result.parameters.Champion + " " + req.body.result.parameters.Role + " are: ";
-		for (var i = 0; i < championBuild.length; i++) {
-			if(i == championBuild.length-1){
+		for (var i = 0; i < championCounters.length; i++) {
+			if(i == championCounters.length-1){
 				speech = speech.slice(0, speech.length-2);
 				speech += " and " + championCounters[i];
 			}
