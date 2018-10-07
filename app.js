@@ -122,7 +122,7 @@ assistant.intent('ChampionCounter', asyncMiddleware(async (request, response, ne
 		}
 	}
 	conv.ask(speech);
-});
+}));
 
 // Routes
 // app.post('/championCounters', asyncMiddleware(async (request, response, next) => {
