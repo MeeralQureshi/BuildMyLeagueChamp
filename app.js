@@ -179,6 +179,54 @@ assistant.intent('ChampionSumms', async (conv) => {
 	}
 });
 
+assistant.intent('ChampionStart', async (conv) => {
+	let champ = conv.parameters.Champion;
+	let role = conv.parameters.Role;
+	try {
+		console.log("Getting data");
+		var championStart = await getChampionStart(champ, role);
+		let speech = "Most frequent starting items for " + champ + " " + role + " are ";
+		for (var i = 0; i < championStart.length; i++) {
+			if(i == championStart.length-1){
+				speech = speech.slice(0, speech.length-2);
+				speech += " and " + championStart[i];
+			}
+			else{
+				speech += championStart[i] + ", ";
+			}
+		}
+		conv.ask(speech);
+	}
+	catch(e){
+		console.log("Error in getting data");
+		conv.ask("There was an error. Please try again");
+	}
+});
+
+assistant.intent('ChampionBuild', async (conv) => {
+	let champ = conv.parameters.Champion;
+	let role = conv.parameters.Role;
+	try {
+		console.log("Getting data");
+		var championBuild = await getChampionBuild(champ, role);
+		let speech = "Most frequent build for " + champ + " " + role + " is ";
+		for (var i = 0; i < championBuild.length; i++) {
+			if(i == championBuild.length-1){
+				speech = speech.slice(0, speech.length-2);
+				speech += " and " + championBuild[i];
+			}
+			else{
+				speech += championBuild[i] + ", ";
+			}
+		}
+		conv.ask(speech);
+	}
+	catch(e){
+		console.log("Error in getting data");
+		conv.ask("There was an error. Please try again");
+	}
+});
+
 
 // Webhook route
 app.post('/webhook', assistant);
