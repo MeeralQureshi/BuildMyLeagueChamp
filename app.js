@@ -155,6 +155,30 @@ assistant.intent('ChampionStrengths', async (conv) => {
 	}
 });
 
+assistant.intent('ChampionSumms', async (conv) => {
+	let champ = conv.parameters.Champion;
+	let role = conv.parameters.Role;
+	try {
+		console.log("Getting data");
+		var championSumms = await getChampionSumms(champ, role);
+		let speech = "Most frequently used summoner spells for " + champ + " " + role " are ";
+		for (var i = 0; i < championSumms.length; i++) {
+			if(i == championSumms.length-1){
+				speech = speech.slice(0, speech.length-2);
+				speech += " and " + championSumms[i];
+			}
+			else{
+				speech += championSumms[i] + ", ";
+			}
+		}
+		conv.ask(speech);
+	}
+	catch(e){
+		console.log("Error in getting data");
+		conv.ask("There was an error. Please try again");
+	}
+});
+
 
 // Webhook route
 app.post('/webhook', assistant);
