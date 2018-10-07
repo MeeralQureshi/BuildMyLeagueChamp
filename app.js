@@ -107,10 +107,21 @@ async function getChampionBuild(champion, role) {
 }
 
 // Assitant
-assistant.intent('ChampionCounter', conv => {
+assistant.intent('ChampionCounter', asyncMiddleware(async (request, response, next) => {
 	let champ = conv.parameters.Champion;
-	let resultString = 'Is ' + champ + ' your champion?'
-	conv.ask(resultString);
+	let role = conv.paramters.Role;
+	var championCounters = await getChampionCounters(champ, role);
+	let speech = "Champions that counter " + champ + " " + role + " are: ";
+	for (var i = 0; i < championCounters.length; i++) {
+		if(i == championCounters.length-1){
+			speech = speech.slice(0, speech.length-2);
+			speech += " and " + championCounters[i];
+		}
+		else{
+			speech += championCounters[i] + ", ";
+		}
+	}
+	conv.ask(speech);
 });
 
 // Routes
@@ -139,7 +150,7 @@ assistant.intent('ChampionCounter', conv => {
 //   });
 // }));
 
-app.post('/championCounters', assistant);
+app.post('/webhook', assistant);
 
 app.get('/championStrengths', asyncMiddleware(async (req, res, next) => {
     var championStrengths = await getChampionStrengths("ahri", "middle");
