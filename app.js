@@ -99,7 +99,7 @@ app.post('/championCounters', asyncMiddleware(async (req, res, next) => {
 	// if champion and role exist in request
 	var speech = "Sorry, that isn't a valid champion and role combination.";
 	if(req.result.parameters && req.result.parameters.Champion && req.result.parameters.Role){
-		var championCounters = await getChampionCounters("ahri", "middle");
+		var championCounters = await getChampionCounters(req.result.parameters.Champion, req.result.parameters.Role);
 		speech = "Champions that counter " + req.result.parameters.Champion + " " + req.result.parameters.Role + " are: ";
 		for (var i = 0; i < championBuild.length; i++) {
 			if(i == championBuild.length-1){
