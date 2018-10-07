@@ -109,7 +109,7 @@ async function getChampionBuild(champion, role) {
 // Assitant
 assistant.intent('ChampionCounter', async (conv) => {
 	let champ = conv.parameters.Champion;
-	let role = conv.paramters.Role;
+	let role = conv.parameters.Role;
 	try {
 		console.log("Getting data");
 		var championCounters = await getChampionCounters(champ, role);
