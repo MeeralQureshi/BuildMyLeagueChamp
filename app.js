@@ -106,7 +106,7 @@ async function getChampionBuild(champion, role) {
     return championBuild;
 }
 
-// Assitant
+// Assitant Intents
 assistant.intent('ChampionCounter', async (conv) => {
 	let champ = conv.parameters.Champion;
 	let role = conv.parameters.Role;
@@ -131,32 +131,32 @@ assistant.intent('ChampionCounter', async (conv) => {
 	}
 });
 
-// Routes
-// app.post('/championCounters', asyncMiddleware(async (request, response, next) => {
-// 	// if champion and role exist in request
-// 	var speech = "Sorry, that isn't a valid champion and role combination.";
-// 	console.log(request);
-// 	console.log(request.body);
-// 	if(request.body.queryResult.parameters && request.body.queryResult.parameters.Champion && request.body.queryResult.parametersRole){
-// 		var championCounters = await getChampionCounters(request.body.queryResult.parameters.Champion, request.body.queryResult.parameters.Role);
-// 		speech = "Champions that counter " + request.body.queryResult.parameters.Champion + " " + request.body.queryResult.parameters.Role + " are: ";
-// 		for (var i = 0; i < championCounters.length; i++) {
-// 			if(i == championCounters.length-1){
-// 				speech = speech.slice(0, speech.length-2);
-// 				speech += " and " + championCounters[i];
-// 			}
-// 			else{
-// 				speech += championCounters[i] + ", ";
-// 			}
-// 		}
-// 	}
-//     return response.json({
-//     speech: speech,
-//     displayText: speech,
-//     source: "BuildMyLeagueChamp"
-//   });
-// }));
+assistant.intent('ChampionStrengths', async (conv) => {
+	let champ = conv.parameters.Champion;
+	let role = conv.parameters.Role;
+	try {
+		console.log("Getting data");
+		var championStrengths = await getChampionStrengths(champ, role);
+		let speech = "Champions that counter " + champ + " " + role + " are: ";
+		for (var i = 0; i < championStrengths.length; i++) {
+			if(i == championStrengths.length-1){
+				speech = speech.slice(0, speech.length-2);
+				speech += " and " + championStrengths[i];
+			}
+			else{
+				speech += championStrengths[i] + ", ";
+			}
+		}
+		conv.ask(speech);
+	}
+	catch(e){
+		console.log("Error in getting data");
+		conv.ask("There was an error. Please try again");
+	}
+});
 
+
+// Webhook route
 app.post('/webhook', assistant);
 
 app.get('/championStrengths', asyncMiddleware(async (req, res, next) => {
