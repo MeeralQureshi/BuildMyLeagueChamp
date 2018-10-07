@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/MeeralQureshi/BuildMyLeagueChamp#readme",
   "dependencies": {
+    "actions-on-google": "^2.4.1",
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.3",

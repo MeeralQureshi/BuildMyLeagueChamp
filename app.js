@@ -2,8 +2,20 @@ const cheerio = require('cheerio')
 const jsonframe = require('jsonframe-cheerio')
 const got = require('got');
 const express = require('express');
+const bodyParser = require("body-parser");
+const app = express();
+const {dialogflow} = require('actions-on-google');
+const assistant = dialogflow({debug: true});
 
-var app = express();
+// Use body parser for requests
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
+
+app.use(bodyParser.json({type: 'application/json'}));
+app.set('port', process.env.PORT || 8000);
 
 // Helper functions WAW
 const asyncMiddleware = fn =>
@@ -94,29 +106,40 @@ async function getChampionBuild(champion, role) {
     return championBuild;
 }
 
+// Assitant
+assistant.intent('ChampionCounter', conv => {
+	let champ = conv.parameters.Champion;
+	let resultString = 'Is ' + champ + ' your champion?'
+	conv.ask(resultString);
+});
+
 // Routes
-app.post('/championCounters', asyncMiddleware(async (req, res, next) => {
-	// if champion and role exist in request
-	var speech = "Sorry, that isn't a valid champion and role combination.";
-	if(req.body.result.parameters && req.body.result.parameters.Champion && req.body.result.parameters.Role){
-		var championCounters = await getChampionCounters(req.body.result.parameters.Champion, req.body.result.parameters.Role);
-		speech = "Champions that counter " + req.body.result.parameters.Champion + " " + req.body.result.parameters.Role + " are: ";
-		for (var i = 0; i < championCounters.length; i++) {
-			if(i == championCounters.length-1){
-				speech = speech.slice(0, speech.length-2);
-				speech += " and " + championCounters[i];
-			}
-			else{
-				speech += championCounters[i] + ", ";
-			}
-		}
-	}
-    return res.json({
-    speech: speech,
-    displayText: speech,
-    source: "BuildMyLeagueChamp"
-  });
-}));
+// app.post('/championCounters', asyncMiddleware(async (request, response, next) => {
+// 	// if champion and role exist in request
+// 	var speech = "Sorry, that isn't a valid champion and role combination.";
+// 	console.log(request);
+// 	console.log(request.body);
+// 	if(request.body.queryResult.parameters && request.body.queryResult.parameters.Champion && request.body.queryResult.parametersRole){
+// 		var championCounters = await getChampionCounters(request.body.queryResult.parameters.Champion, request.body.queryResult.parameters.Role);
+// 		speech = "Champions that counter " + request.body.queryResult.parameters.Champion + " " + request.body.queryResult.parameters.Role + " are: ";
+// 		for (var i = 0; i < championCounters.length; i++) {
+// 			if(i == championCounters.length-1){
+// 				speech = speech.slice(0, speech.length-2);
+// 				speech += " and " + championCounters[i];
+// 			}
+// 			else{
+// 				speech += championCounters[i] + ", ";
+// 			}
+// 		}
+// 	}
+//     return response.json({
+//     speech: speech,
+//     displayText: speech,
+//     source: "BuildMyLeagueChamp"
+//   });
+// }));
+
+app.post('/championCounters', assistant);
 
 app.get('/championStrengths', asyncMiddleware(async (req, res, next) => {
     var championStrengths = await getChampionStrengths("ahri", "middle");
@@ -138,6 +161,6 @@ app.get('/championBuild', asyncMiddleware(async (req, res, next) => {
     res.send(championBuild);
 }));
 
-app.listen(process.env.PORT || 8000, function() {
-    console.log('Building Champs...');
+app.listen(app.get('port'), function () {
+	console.log('Building champions on port', app.get('port'));
 });
