@@ -107,22 +107,29 @@ async function getChampionBuild(champion, role) {
 }
 
 // Assitant
-assistant.intent('ChampionCounter', asyncMiddleware(async (request, response, next) => {
+assistant.intent('ChampionCounter', async (conv) => {
 	let champ = conv.parameters.Champion;
 	let role = conv.paramters.Role;
-	var championCounters = await getChampionCounters(champ, role);
-	let speech = "Champions that counter " + champ + " " + role + " are: ";
-	for (var i = 0; i < championCounters.length; i++) {
-		if(i == championCounters.length-1){
-			speech = speech.slice(0, speech.length-2);
-			speech += " and " + championCounters[i];
+	try {
+		console.log("Getting data");
+		var championCounters = await getChampionCounters(champ, role);
+		let speech = "Champions that counter " + champ + " " + role + " are: ";
+		for (var i = 0; i < championCounters.length; i++) {
+			if(i == championCounters.length-1){
+				speech = speech.slice(0, speech.length-2);
+				speech += " and " + championCounters[i];
+			}
+			else{
+				speech += championCounters[i] + ", ";
+			}
 		}
-		else{
-			speech += championCounters[i] + ", ";
-		}
+		conv.ask(speech);
 	}
-	conv.ask(speech);
-}));
+	catch(e){
+		console.log("Error in getting data");
+		conv.ask("There was an error. Please try again");
+	}
+});
 
 // Routes
 // app.post('/championCounters', asyncMiddleware(async (request, response, next) => {
