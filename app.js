@@ -106,6 +106,24 @@ async function getChampionBuild(champion, role) {
     return championBuild;
 }
 
+async function getChampionRunes(champion, role) {
+    var requestUrl = "https://champion.gg/champion/" + champion + "/" + role;
+    console.log(requestUrl);
+    var html = await got(requestUrl);
+    let $ = cheerio.load(html.body);
+
+    var championBuild = [];
+    $('.col-xs-12.col-sm-12.col-md-7 .build-wrapper a').each(function(index, element){
+    	if(championBuild.length < 6){
+    		var item = $(element).attr('href').slice($(element).attr('href').lastIndexOf("/") + 1, $(element).attr('href').length);
+    		var item = item.replace('\\', '');
+    		championBuild.push(item);
+    	}
+    });
+    console.log(championBuild);
+    return championBuild;
+}
+
 // Assitant Intents
 assistant.intent('ChampionCounter', async (conv) => {
 	let champ = conv.parameters.Champion;
@@ -227,30 +245,5 @@ assistant.intent('ChampionBuild', async (conv) => {
 	}
 });
 
-
 // Webhook route
 app.post('/webhook', assistant);
-
-app.get('/championStrengths', asyncMiddleware(async (req, res, next) => {
-    var championStrengths = await getChampionStrengths("ahri", "middle");
-    res.send(championStrengths);
-}));
-
-app.get('/championSumms', asyncMiddleware(async (req, res, next) => {
-    var championSumms = await getChampionSumms("ahri", "middle");
-    res.send(championSumms);
-}));
-
-app.get('/championStart', asyncMiddleware(async (req, res, next) => {
-    var championStart = await getChampionStart("ahri", "middle");
-    res.send(championStart);
-}));
-
-app.get('/championBuild', asyncMiddleware(async (req, res, next) => {
-    var championBuild = await getChampionBuild("ahri", "middle");
-    res.send(championBuild);
-}));
-
-app.listen(app.get('port'), function () {
-	console.log('Building champions on port', app.get('port'));
-});
