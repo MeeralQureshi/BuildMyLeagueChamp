@@ -247,3 +247,7 @@ assistant.intent('ChampionBuild', async (conv) => {
 
 // Webhook route
 app.post('/webhook', assistant);
+
+app.listen(app.get('port'), function () {
+	console.log('Building champions on port', app.get('port'));
+});
