@@ -1,0 +1,27 @@
+version: "3"
+services:
+  blc:
+    image: blc/blc:latest
+    container_name: blc
+    build: .
+    restart: unless-stopped
+    environment: 
+        PORT: 9736
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.blc.entrypoints=http"
+      - "traefik.http.routers.blc.rule=Host(`build-league-champ.meeralq.com`)"
+      - "traefik.http.routers.blc.middlewares=blc-https-redirect"
+      - "traefik.http.routers.blc-secure.entrypoints=https"
+      - "traefik.http.routers.blc-secure.rule=Host(`build-league-champ.meeralq.com`)"
+      - "traefik.http.middlewares.blc-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.blc-secure.service=blc"
+      - "traefik.http.routers.blc-secure.tls=true"
+      - "traefik.http.routers.blc-secure.tls.certresolver=http"
+      - "traefik.http.services.blc.loadbalancer.server.port=9736"
+networks:
+  proxy:
+    external: true

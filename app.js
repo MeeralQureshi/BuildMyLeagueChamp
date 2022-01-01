@@ -15,7 +15,7 @@ app.use(
 );
 
 app.use(bodyParser.json({type: 'application/json'}));
-app.set('port', process.env.PORT || 8000);
+app.set('port', process.env.PORT || 9736);
 
 // Helper functions WAW
 const asyncMiddleware = fn =>
